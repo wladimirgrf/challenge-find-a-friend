@@ -5,13 +5,18 @@ import { OrgAlreadyExistsError } from '@/useCases/errors/orgAlreadyExistsError'
 import { makeRegisterUseCase } from '@/useCases/factories/makeRegisterUseCase'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
+  const mobileRegExp =
+    /^(?:(?:\+|00)55\s?)?(?:\(\d{2}\)|\d{2})\s?(?:9\s?)??\d{4}[- ]?\d{4}$/
+
   const registerBodySchema = z
     .object({
       responsibleName: z.string(),
       email: z.string().email(),
       password: z.string().min(6),
       confirmPassword: z.string().min(6),
-      whatsapp: z.string(),
+
+      whatsapp: z.string().regex(mobileRegExp, 'Invalid Phone Number!'),
+
       latitude: z.number().refine((value) => {
         return Math.abs(value) <= 90
       }),

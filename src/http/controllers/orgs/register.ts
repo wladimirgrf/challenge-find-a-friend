@@ -15,6 +15,10 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       password: z.string().min(6),
       confirmPassword: z.string().min(6),
 
+      address: z.string(),
+      city: z.string(),
+      state: z.string().length(2).toUpperCase(),
+
       whatsapp: z.string().regex(mobileRegExp, 'Invalid Phone Number!'),
 
       latitude: z.number().refine((value) => {
@@ -29,20 +33,34 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       path: ['confirmPassword'],
     })
 
-  const { responsibleName, email, password, whatsapp, latitude, longitude } =
-    registerBodySchema.parse(request.body)
+  const {
+    responsibleName,
+    email,
+    password,
+    whatsapp,
+    latitude,
+    longitude,
+    address,
+    city,
+    state,
+  } = registerBodySchema.parse(request.body)
 
   try {
     const registerUseCase = makeRegisterUseCase()
 
-    await registerUseCase.execute({
+    const { org } = await registerUseCase.execute({
       responsibleName,
       email,
       whatsapp,
       password,
       latitude,
       longitude,
+      address,
+      city,
+      state,
     })
+
+    return reply.status(201).send({ org })
   } catch (err) {
     if (err instanceof OrgAlreadyExistsError) {
       return reply.status(409).send({ message: err.message })
@@ -50,6 +68,4 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
     throw err
   }
-
-  return reply.status(201).send()
 }

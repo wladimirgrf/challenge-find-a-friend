@@ -51,6 +51,9 @@ model Org {
   whatsapp         String
   latitude         Decimal
   longitude        Decimal
+  address          String
+  city             String
+  state            String  @db.VarChar(2)
 
   Pet Pet[]
 

@@ -10,6 +10,9 @@ interface RegisterUseCaseRequest {
   whatsapp: string
   latitude: number
   longitude: number
+  state: string
+  city: string
+  address: string
 }
 
 interface RegisterUseCaseResponse {
@@ -26,6 +29,9 @@ export class RegisterUseCase {
     whatsapp,
     latitude,
     longitude,
+    state,
+    city,
+    address,
   }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
     const orgWithSameEmail = await this.orgsRepository.findByEmail(email)
 
@@ -40,6 +46,9 @@ export class RegisterUseCase {
       whatsapp,
       latitude,
       longitude,
+      state,
+      city,
+      address,
       password_hash: passwordHash,
       responsible_name: responsibleName,
     })

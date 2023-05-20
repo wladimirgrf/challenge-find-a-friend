@@ -6,11 +6,11 @@ import { makeGetPetUseCase } from '@/useCases/factories/makeGetPetUseCase'
 import { ResourceNotFoundError } from '@/useCases/errors/resourceNotFoundError'
 
 export async function get(request: FastifyRequest, reply: FastifyReply) {
-  const uploadParamsSchema = z.object({
+  const paramsSchema = z.object({
     id: z.string().uuid(),
   })
 
-  const { id } = uploadParamsSchema.parse(request.params)
+  const { id } = paramsSchema.parse(request.params)
 
   try {
     const useCase = makeGetPetUseCase()

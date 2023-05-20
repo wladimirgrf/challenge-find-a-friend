@@ -7,11 +7,11 @@ import { ResourceNotFoundError } from '@/useCases/errors/resourceNotFoundError'
 import { InvalidImageFormatError } from '@/useCases/errors/invalidImageFormatError'
 
 export async function upload(request: FastifyRequest, reply: FastifyReply) {
-  const uploadParamsSchema = z.object({
+  const paramsSchema = z.object({
     id: z.string().uuid(),
   })
 
-  const { id } = uploadParamsSchema.parse(request.params)
+  const { id } = paramsSchema.parse(request.params)
 
   if (!request.isMultipart()) {
     return reply.status(400).send({ message: 'The request is not multipart!' })

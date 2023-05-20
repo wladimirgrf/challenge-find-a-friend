@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
 import { Replace } from '@/helpers/Replace'
-import { PetsRepository } from '../petsRepository'
+import { PetsRepository, FindManyFromCityProps } from '../petsRepository'
 
 export class PrismaPetsRepository implements PetsRepository {
   async findById(id: string) {
@@ -14,12 +14,39 @@ export class PrismaPetsRepository implements PetsRepository {
             id: true,
             responsible_name: true,
             whatsapp: true,
+            address: true,
+            state: true,
+            city: true,
+            latitude: true,
+            longitude: true,
           },
         },
       },
     })
 
     return pet
+  }
+
+  async findManyFromCity({
+    city,
+    state,
+    age,
+    size,
+    energy_level,
+  }: FindManyFromCityProps) {
+    const pets = await prisma.pet.findMany({
+      where: {
+        age,
+        size,
+        energy_level,
+        org: {
+          state,
+          city: { mode: 'insensitive', equals: city },
+        },
+      },
+    })
+
+    return pets
   }
 
   async create(data: Prisma.PetCreateInput) {

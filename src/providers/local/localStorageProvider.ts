@@ -14,14 +14,5 @@ export class LocalStorageProvider implements StorageProvider {
     )
 
     await pump(file, writeStream)
-
-    const fileUrl = new URL(
-      `/assets/${filename}`,
-      process.env.APP_DOMAIN,
-    ).toString()
-
-    return {
-      fileUrl,
-    }
   }
 }

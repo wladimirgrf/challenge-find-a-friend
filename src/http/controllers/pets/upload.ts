@@ -26,12 +26,14 @@ export async function upload(request: FastifyRequest, reply: FastifyReply) {
   try {
     const useCase = makeUploadPetImageUseCase()
 
-    await useCase.execute({
+    const { pet } = await useCase.execute({
       file: upload.file,
       mimetype: upload.mimetype,
       originalFileName: upload.filename,
       petId: id,
     })
+
+    return reply.status(200).send({ pet })
   } catch (err) {
     if (
       err instanceof ResourceNotFoundError ||
@@ -42,6 +44,4 @@ export async function upload(request: FastifyRequest, reply: FastifyReply) {
 
     throw err
   }
-
-  return reply.status(204).send()
 }

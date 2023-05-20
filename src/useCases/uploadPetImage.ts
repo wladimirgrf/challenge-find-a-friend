@@ -48,13 +48,16 @@ export class UploadPetImageUseCase {
 
     const fileId = randomUUID()
     const extension = extname(originalFileName)
-
     const filename = fileId.concat(extension)
 
-    const { fileUrl } = await this.storageProvider.upload({ filename, file })
+    const fileUrl = new URL(
+      `/assets/${filename}`,
+      process.env.APP_DOMAIN,
+    ).toString()
 
     pet.images.push(fileUrl)
 
+    await this.storageProvider.upload({ filename, file })
     await this.petsRepository.save(pet)
 
     return {

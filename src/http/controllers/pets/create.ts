@@ -28,7 +28,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   try {
     const useCase = makeCreatePetUseCase()
 
-    await useCase.execute({
+    const { pet } = await useCase.execute({
       name,
       about,
       size,
@@ -37,6 +37,8 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       orgId: request.user.sub,
       requirements,
     })
+
+    return reply.status(201).send({ pet })
   } catch (err) {
     if (err instanceof ResourceNotFoundError) {
       return reply.status(400).send({ message: err.message })
@@ -44,6 +46,4 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
     throw err
   }
-
-  return reply.status(201).send()
 }

@@ -5,10 +5,6 @@ export interface UploadInput {
   file: Readable
 }
 
-interface UploadOutput {
-  fileUrl: string
-}
-
 export interface StorageProvider {
-  upload(data: UploadInput): Promise<UploadOutput>
+  upload(data: UploadInput): Promise<void>
 }

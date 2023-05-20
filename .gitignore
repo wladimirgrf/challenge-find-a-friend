@@ -1,5 +1,9 @@
+.env
+.DS_store
+
 node_modules
 build
 coverage
-.env
-.DS_store
+
+assets/*
+!assets/.gitkeep

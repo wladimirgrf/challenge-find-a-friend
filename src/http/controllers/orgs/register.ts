@@ -60,7 +60,11 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       state,
     })
 
-    return reply.status(201).send({ org })
+    const { password_hash, ...safeInfo } = org
+
+    return reply.status(201).send({
+      org: safeInfo,
+    })
   } catch (err) {
     if (err instanceof OrgAlreadyExistsError) {
       return reply.status(409).send({ message: err.message })
